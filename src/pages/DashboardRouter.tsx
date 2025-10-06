@@ -36,11 +36,11 @@ export const DashboardRouter = () => {
   return (
     <MobileLayout user={user} onLogout={handleLogout}>
       <Routes>
-        <Route path="/dashboard" element={<DashboardHome />} />
-        <Route path="/data-entry" element={<DataEntry userRole={user.role} />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/profile" element={<Profile user={user} onLogout={handleLogout} />} />
-        <Route path="/*" element={<Navigate to="/dashboard" replace />} />
+        <Route path="dashboard" element={<DashboardHome />} />
+        <Route path="data-entry" element={<DataEntry userRole={user.role} />} />
+        <Route path="reports" element={<Reports />} />
+        <Route path="profile" element={<Profile user={user} onLogout={handleLogout} />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </MobileLayout>
   );
