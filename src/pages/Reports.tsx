@@ -1,10 +1,18 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MetricsChart } from "@/components/MetricsChart";
 import { Download, Calendar, TrendingUp, AlertCircle } from "lucide-react";
+import { HistoricalDataModal } from "@/components/HistoricalDataModal";
+import { StandardsComparisonModal } from "@/components/StandardsComparisonModal";
+import { generatePDFReport } from "@/utils/pdfGenerator";
+import { useToast } from "@/hooks/use-toast";
 
 export const Reports = () => {
+  const [showHistoricalData, setShowHistoricalData] = useState(false);
+  const [showStandardsComparison, setShowStandardsComparison] = useState(false);
+  const { toast } = useToast();
   const reportData = {
     weeklyAverage: {
       mortality: 3.2,
@@ -124,19 +132,47 @@ export const Reports = () => {
 
       {/* Report Actions */}
       <div className="space-y-3">
-        <Button variant="outline" className="w-full justify-start">
+        <Button 
+          variant="outline" 
+          className="w-full justify-start"
+          onClick={() => setShowHistoricalData(true)}
+        >
           <Calendar className="h-4 w-4 mr-2" />
           View Historical Data
         </Button>
-        <Button variant="outline" className="w-full justify-start">
+        <Button 
+          variant="outline" 
+          className="w-full justify-start"
+          onClick={() => {
+            generatePDFReport(reportData);
+            toast({
+              title: "Report Downloaded",
+              description: "PDF report has been generated and downloaded successfully",
+            });
+          }}
+        >
           <Download className="h-4 w-4 mr-2" />
           Download Detailed Report (PDF)
         </Button>
-        <Button variant="outline" className="w-full justify-start">
+        <Button 
+          variant="outline" 
+          className="w-full justify-start"
+          onClick={() => setShowStandardsComparison(true)}
+        >
           <TrendingUp className="h-4 w-4 mr-2" />
           Compare with Standards
         </Button>
       </div>
+
+      {/* Modals */}
+      <HistoricalDataModal 
+        open={showHistoricalData} 
+        onOpenChange={setShowHistoricalData} 
+      />
+      <StandardsComparisonModal 
+        open={showStandardsComparison} 
+        onOpenChange={setShowStandardsComparison} 
+      />
     </div>
   );
 };
